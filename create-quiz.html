@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Own Quiz</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="quiz-builder-section" style="margin-top:48px;">
+        <div class="quiz-builder-header">
+            <h2>Create Your Own Quiz</h2>
+            <p>Build a custom cybersecurity quiz and share it with others!</p>
+        </div>
+        <div class="quiz-builder-form">
+            <div>
+                <label for="quizThumbnail">Quiz Thumbnail (Optional)</label>
+                <input type="file" id="quizThumbnail" name="quizThumbnail" accept="image/*">
+            </div>
+            <form id="quizBuilderForm">
+                <div>
+                    <label for="quizTitle">Quiz Title</label>
+                    <input type="text" id="quizTitle" name="quizTitle" placeholder="Enter quiz title..." required>
+                </div>
+                <div id="quizQuestionsContainer">
+                    <!-- Questions will be dynamically added here -->
+                </div>
+                <button type="button" id="addQuestionBtn" class="quiz-btn">Add Question</button>
+                <button type="submit" class="quiz-btn" style="margin-left: 8px;">Save Quiz</button>
+                <a href="index.html" class="quiz-btn nav-link" style="margin-left: 8px; background:#ccc; color:#222; text-decoration:none;">Cancel</a>
+            </form>
+        </div>
+    </div>
+    <script>
+    document.getElementById('addQuestionBtn').addEventListener('click', function() {
+        const container = document.getElementById('quizQuestionsContainer');
+        const questionCount = container.children.length + 1;
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question-item');
+        questionDiv.style.marginBottom = "24px";
+        questionDiv.innerHTML = `
+            <label for="question${questionCount}">Question ${questionCount}</label>
+            <input type="text" id="question${questionCount}" name="question${questionCount}" placeholder="Enter your question..." required>
+            <div>
+                <label for="answer${questionCount}A">Answer A</label>
+                <input type="text" id="answer${questionCount}A" name="answer${questionCount}A" placeholder="Enter answer A..." required>
+            </div>
+            <div>
+                <label for="answer${questionCount}B">Answer B</label>
+                <input type="text" id="answer${questionCount}B" name="answer${questionCount}B" placeholder="Enter answer B..." required>
+            </div>
+            <div>
+                <label for="correctAnswer${questionCount}">Correct Answer</label>
+                <select id="correctAnswer${questionCount}" name="correctAnswer${questionCount}" required>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                </select>
+            </div>
+        `;
+        container.appendChild(questionDiv);
+    });
+
+    document.getElementById('quizBuilderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const title = document.getElementById('quizTitle').value;
+        const questions = [];
+        document.querySelectorAll('.question-item').forEach(item => {
+            const question = item.querySelector('input[type="text"]').value;
+            const answers = [
+                item.querySelector('input[name^="answer"][id$="A"]').value,
+                item.querySelector('input[name^="answer"][id$="B"]').value
+            ];
+            const correct = item.querySelector('select').value === 'A' ? 0 : 1;
+            questions.push({ question, answers, correct });
+        });
+        
+        const thumbnailInput = document.getElementById('quizThumbnail');
+
+        const saveQuiz = (thumbnailData) => {
+            let quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+            quizzes.push({ title, questions, thumbnail: thumbnailData });
+            localStorage.setItem('quizzes', JSON.stringify(quizzes));
+
+            alert('Quiz saved!');
+            window.location.href = 'index.html';
+        };
+
+        if (thumbnailInput.files && thumbnailInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                saveQuiz(e.target.result);
+            };
+            reader.readAsDataURL(thumbnailInput.files[0]);
+        } else {
+            saveQuiz(null);
+        }
+    });
+    </script>
+</body>
+</html>

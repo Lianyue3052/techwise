@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Awareness for Seniors</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="nav-bar">
+            <div class="logo">TechWise</div>
+             <nav>
+                <ul class="nav-list">
+                    <li><a href="about.html" class="nav-btn">About Us</a></li>
+                </ul>
+            </nav>
+            <form class="search-bar" id="searchForm" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Search articles..." aria-label="Search">
+                <button type="submit" aria-label="Search">&#128269;</button>
+            </form>
+        </div>
+    </header>
+    <main>
+         <section class="featured-article large-featured" style="background-image: url('images/article-pics/featured.jpg'); background-size: fill; background-position: center;">
+    <div class="featured-overlay-content">
+      <div class="featured-text-wrapper">
+        <div class="featured-meta">
+          <span class="tag">Cybersecurity</span>
+          <span class="tag">Guide</span>
+        </div>
+        <h1 class="featured-title">Exploring the Wonders of Online Safety</h1>
+        <p class="featured-desc">An essential guide for seniors: discover the secrets to staying safe and confident online.</p>
+        <div class="featured-author-row">
+          <img src="images/team-members/bacaoco.jpg" alt="Author" class="author-img">
+          <span class="featured-author-name">Khyer Cedric Bacaoco</span>
+          <span class="featured-date">Leader</span>
+        </div>
+      </div>
+    </div>
+  </section>
+        <section class="blog-section">
+            <div class="blog-header">
+                <h2>Blog</h2>
+                <div class="blog-controls">
+                    <div class="tags" id="tagFilter">
+                        <button class="tag-btn active" data-tag="all">All</button>
+                        <button class="tag-btn" data-tag="cybersecurity">Cybersecurity</button>
+                        <button class="tag-btn" data-tag="tips">Tips & Hacks</button>
+                        <button class="tag-btn" data-tag="lifestyle">Lifestyle</button>
+                    </div>
+                    <div class="sort">
+                        <label for="sortSelect">Sort by:</label>
+                        <select id="sortSelect">
+                            <option value="newest">Newest</option>
+                            <option value="oldest">Oldest</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="article-list-grid" id="articleGrid">
+                <a class="article-card" href="#" data-date="2024-01-24" data-tags="cybersecurity,guide">
+                    <img src="images/article-pics/passwords.jpg" alt="Strong Passwords" class="article-thumb">
+                    <span class="tag">Cybersecurity</span>
+                    <div class="article-card-content">
+                        <h3>How to Create Strong Passwords</h3>
+                        <p class="article-desc">Learn simple steps to make your passwords safer and harder to guess.</p>
+                    </div>
+                </a>
+                <a class="article-card" href="#" data-date="2024-01-20" data-tags="tips">
+                    <img src="images/article-pics/article2.jpg" alt="Online Scams" class="article-thumb">
+                    <span class="tag">Tips & Hacks</span>
+                    <div class="article-card-content">
+                        <h3>Spotting Online Scams</h3>
+                        <p class="article-desc">Tips to recognize and avoid common internet scams targeting seniors.</p>
+                    </div>
+                </a>
+                <a class="article-card" href="#" data-date="2024-01-15" data-tags="lifestyle">
+                    <img src="images/article-pics/article3.avif" alt="Article 3" class="article-thumb">
+                    <span class="tag">Lifestyle</span>
+                    <div class="article-card-content">
+                        <h3>Email Safety Basics</h3>
+                        <p class="article-desc">How to tell if an email is safe or a phishing attempt.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <!-- Quiz Section Start -->
+        <section class="quiz-section">
+            <div class="quiz-header">
+                <div>
+                    <h2>Cybersecurity Quizzes</h2>
+                    <p>Test your knowledge and improve your online safety skills!</p>
+                </div>
+                <div class="quiz-actions">
+                    <div class="quiz-scroll-buttons">
+                        <button id="quizScrollLeft" class="scroll-btn">&larr;</button>
+                        <button id="quizScrollRight" class="scroll-btn">&rarr;</button>
+                    </div>
+                    <a href="create-quiz.html" class="quiz-btn nav-link">Create Quiz</a>
+                </div>
+            </div>
+            <div class="quiz-scroll-wrapper">
+                <div class="quiz-list-grid" id="quizGrid"></div>
+            </div>
+        </section>
+        <!-- Quiz Section End -->
+    </main>
+    <script>
+    // Search functionality
+    function filterArticles(query) {
+        const cards = document.querySelectorAll('.article-card');
+        let anyVisible = false;
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(query)) {
+                card.style.display = '';
+                anyVisible = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        // Optionally hide featured if searching
+        const featured = document.querySelector('.featured-article');
+        if (query.trim() !== "") {
+            if (featured) featured.style.display = "none";
+        } else {
+            if (featured) featured.style.display = "";
+        }
+    }
+
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        filterArticles(query);
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        filterArticles(query);
+    });
+
+    // Tag filter
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const tag = this.getAttribute('data-tag');
+            document.querySelectorAll('.article-card').forEach(card => {
+                if (tag === 'all' || card.getAttribute('data-tags').includes(tag)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Sort functionality
+    document.getElementById('sortSelect').addEventListener('change', function() {
+        const grid = document.getElementById('articleGrid');
+        const cards = Array.from(grid.querySelectorAll('.article-card'));
+        const sortBy = this.value;
+        cards.sort((a, b) => {
+            const dateA = new Date(a.getAttribute('data-date'));
+            const dateB = new Date(b.getAttribute('data-date'));
+            return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+        });
+        cards.forEach(card => grid.appendChild(card));
+    });
+
+    // Load quizzes
+    function loadQuizzes() {
+        const grid = document.getElementById('quizGrid');
+        grid.innerHTML = '';
+        // Load from localStorage
+        let quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+        quizzes.forEach((quiz, idx) => {
+            const card = document.createElement('a');
+            card.className = 'quiz-card';
+            const thumbnail = quiz.thumbnail
+                ? `<img src="${quiz.thumbnail}" alt="${quiz.title} Thumbnail" class="quiz-thumb">`
+                : `<div class="quiz-thumb"></div>`;
+            card.href = `quiz-take.html?quiz=${idx}`; // Pass index in URL
+            card.innerHTML = `
+                ${thumbnail}
+                <h3>${quiz.title}</h3>
+                <p class="quiz-desc">${quiz.questions.length} questions</p>
+            `;
+          grid.appendChild(card);
+        });
+
+        // Optionally, add your static quizzes here as well
+    }
+    window.addEventListener('DOMContentLoaded', loadQuizzes);
+
+    // Quiz Scroller
+    const quizScrollWrapper = document.querySelector('.quiz-scroll-wrapper');
+    const scrollLeftBtn = document.getElementById('quizScrollLeft');
+    const scrollRightBtn = document.getElementById('quizScrollRight');
+
+    if (quizScrollWrapper && scrollLeftBtn && scrollRightBtn) {
+        const scrollAmount = 312; // width of card (280) + gap (32)
+
+        scrollRightBtn.addEventListener('click', () => {
+            quizScrollWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        scrollLeftBtn.addEventListener('click', () => {
+            quizScrollWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    }
+
+    const cards = document.querySelectorAll('.article-card');
+    function onScroll() {
+        cards.forEach((card, i) => {
+            const rect = card.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 50) {
+                card.classList.add('fade-in', 'in-view');
+                card.style.transitionDelay = `${0.1 + i * 0.1}s`;
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+    </script>

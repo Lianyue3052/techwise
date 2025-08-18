@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Cybersecurity Awareness for Seniors</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="nav-bar">
+            <div class="logo">SigmaSenior</div>
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-btn">Home</a></li>
+                    <li><a href="about.html" class="nav-btn active">About Us</a></li>
+                </ul>
+            </nav>
+            <form class="search-bar" id="searchForm" autocomplete="off">
+                <input type="text" id="searchInput" placeholder="Search articles or team..." aria-label="Search">
+                <button type="submit" aria-label="Search">&#128269;</button>
+            </form>
+        </div>
+        <hr class="divider">
+    </header>
+    <main>
+        <section class="team-showcase">
+            <h2 class="team-title">Our Team</h2>
+            <p class="team-desc">
+                We strive to do everything so that you can comfortably and productively work in our space and create amazing products and services.
+            </p>
+            <div class="team-cards" id="teamCards">
+                <div class="team-card" data-name="Khyer Cedric Bacaoco Leader">
+                    <img src="images/team-members/bacaoco.jpg" alt="Khyer Cedric Bacaoco" class="team-img">
+                    <div class="team-info">
+                        <div class="team-name">Khyer Cedric Bacaoco</div>
+                        <div class="team-role">Leader</div>
+                        <div class="team-socials">
+                            <a href="#" aria-label="Facebook"><img src="images/social-facebook.svg" alt="Facebook"></a>
+                            <a href="#" aria-label="Instagram"><img src="images/social-instagram.svg" alt="Instagram"></a>
+                            <a href="#" aria-label="Email"><img src="images/social-email.svg" alt="Email"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card" data-name="Aeron Lance Lacap GrowAGarden Entrepreneur">
+                    <img src="images/team-members/lacap.jpg" alt="Aeron Lance Lacap" class="team-img">
+                    <div class="team-info">
+                        <div class="team-name">Aeron Lance Lacap</div>
+                        <div class="team-role">GrowAGarden Entrepreneur</div>
+                        <div class="team-socials">
+                            <a href="#" aria-label="Facebook"><img src="images/social-facebook.svg" alt="Facebook"></a>
+                            <a href="#" aria-label="Instagram"><img src="images/social-instagram.svg" alt="Instagram"></a>
+                            <a href="#" aria-label="Email"><img src="images/social-email.svg" alt="Email"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card" data-name="Joseph Rudolph Caoile Web Developer">
+                    <img src="images/team3.jpg" alt="Joseph Rudolph Caoile" class="team-img">
+                    <div class="team-info">
+                        <div class="team-name">Joseph Rudolph Caoile</div>
+                        <div class="team-role">Web Developer</div>
+                        <div class="team-socials">
+                            <a href="#" aria-label="Facebook"><img src="images/social-facebook.svg" alt="Facebook"></a>
+                            <a href="#" aria-label="Instagram"><img src="images/social-instagram.svg" alt="Instagram"></a>
+                            <a href="#" aria-label="Email"><img src="images/social-email.svg" alt="Email"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Cybersecurity Awareness for Seniors</p>
+    </footer>
+    <script>
+    // Simple search for team members (can be expanded for articles)
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('.team-card');
+        let found = false;
+        cards.forEach(card => {
+            if (card.getAttribute('data-name').toLowerCase().includes(query)) {
+                card.style.display = '';
+                found = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        // If nothing found, show all again
+        if (!found && query.trim() !== '') {
+            cards.forEach(card => card.style.display = 'none');
+        }
+        if (query.trim() === '') {
+            cards.forEach(card => card.style.display = '');
+        }
+    });
+    </script>
+</body>
+</html>

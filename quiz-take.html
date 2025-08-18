@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Quiz</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .quiz-container {
+            max-width: 600px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            padding: 32px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .quiz-progress {
+            margin-bottom: 12px;
+            color: #888;
+            font-size: 1em;
+        }
+        .quiz-question {
+            font-size: 1.2em;
+            margin-bottom: 18px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .quiz-question.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .quiz-options label {
+            display: block;
+            margin-bottom: 12px;
+            cursor: pointer;
+            background: #f4f6fa;
+            border-radius: 12px;
+            padding: 10px 16px;
+            transition: background 0.2s, border 0.2s;
+            border: 2px solid transparent;
+        }
+        .quiz-options input[type="radio"] {
+            margin-right: 10px;
+        }
+        .quiz-options label.selected {
+            background: #e0f7ef;
+            border-color: #10a37f;
+        }
+        .quiz-options label.correct {
+            background: #c8f7c5;
+            border-color: #2ecc40;
+            animation: correctPop 0.4s;
+        }
+        .quiz-options label.incorrect {
+            background: #ffd6d6;
+            border-color: #ff4d4d;
+        }
+        @keyframes correctPop {
+            0% { transform: scale(1); }
+            60% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        .quiz-result {
+            margin-top: 24px;
+            font-size: 1.15em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .quiz-btn {
+            background: #10a37f;
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 10px 28px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+        .quiz-btn:hover {
+            background: #0d7c5c;
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container" style="margin-top:48px;">
+    <h2 id="quizTitle"></h2>
+    <div id="quizContent"></div>
+</div>
+<script>
+function getQuizIndex() {
+    const params = new URLSearchParams(window.location.search);
+    return parseInt(params.get('quiz'), 10);
+}
+
+const quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
+const quizIdx = getQuizIndex();
+const quiz = quizzes[quizIdx];
+
+let current = 0, score = 0;
+
+function showQuestion() {
+    const container = document.getElementById('quizContent');
+    if (!quiz || !quiz.questions[current]) {
+        container.innerHTML = `<div class="quiz-result">Quiz complete! You scored ${score} out of ${quiz.questions.length}.</div>
+        <a href="index.html" class="quiz-btn" style="margin-top:16px;">Back to Home</a>`;
+        document.getElementById('quizTitle').textContent = quiz ? quiz.title : '';
+        return;
+    }
+    const q = quiz.questions[current];
+    document.getElementById('quizTitle').textContent = quiz.title;
+    container.innerHTML = `
+        <div class="quiz-progress">Question ${current+1} of ${quiz.questions.length} (${quiz.questions.length-current} left)</div>
+        <div class="quiz-question" id="quizQuestion">${q.question}</div>
+        <form id="quizOptions" class="quiz-options"></form>
+    `;
+    setTimeout(() => {
+        document.getElementById('quizQuestion').classList.add('active');
+    }, 10);
+
+    const optionsForm = document.getElementById('quizOptions');
+    q.answers.forEach((opt, idx) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="opt" value="${idx}"> ${opt}`;
+        optionsForm.appendChild(label);
+
+        // One-click answer logic
+        label.addEventListener('click', function(e) {
+            if (optionsForm.classList.contains('locked')) return;
+            optionsForm.classList.add('locked');
+            // Mark answers
+            optionsForm.querySelectorAll('label').forEach((l, i) => {
+                l.classList.remove('selected');
+                if (i === q.correct) l.classList.add('correct');
+                if (idx === i && idx !== q.correct) l.classList.add('incorrect');
+            });
+            if (idx === q.correct) score++;
+            setTimeout(() => {
+                current++;
+                optionsForm.classList.remove('locked');
+                showQuestion();
+            }, 900);
+        });
+    });
+}
+showQuestion();
+</script>
+</body>
+</html>
