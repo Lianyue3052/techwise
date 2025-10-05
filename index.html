@@ -1,34 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity Awareness for Seniors</title>
-    <link rel="stylesheet" href="styles/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybersecurity Awareness for Seniors</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth; /* Smooth scrolling for transitions */
+      scroll-snap-type: y proximity; /* Proximity snapping for minimal scroll */
+      overflow-y: scroll; /* Ensure scrolling is enabled */
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      color: #1d1d1f;
+      background: #f5f5f7;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Main container */
+    main {
+      scroll-snap-type: y proximity; /* Proximity snapping for main */
+    }
+
+    /* Header */
+    .main-header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 12px 0;
+    }
+
+    .nav-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-btn {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      opacity: 0.8;
+    }
+
+    /* Hero Section */
+    .featured-article {
+      min-height: 100vh; /* Full viewport height */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/article-pics/featured.jpg') no-repeat center/cover;
+      text-align: center;
+      padding: 80px 24px;
+      color: #fff;
+      width: 100vw; /* Full viewport width */
+      box-sizing: border-box;
+      scroll-snap-align: start; /* Snap to section start */
+    }
+
+    .featured-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .featured-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .featured-desc {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .featured-author-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .author-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .featured-author-name, .featured-date {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* Blog Section */
+    .blog-section {
+      min-height: 100vh; /* Full viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      width: 100vw; /* Full viewport width */
+      box-sizing: border-box;
+      scroll-snap-align: start; /* Snap to section start */
+    }
+
+    .blog-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .article-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .article-card {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      text-decoration: none;
+      color: #1d1d1f;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-thumb {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #0071e3;
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      margin: 12px;
+    }
+
+    .article-card-content {
+      padding: 16px;
+    }
+
+    .article-card-content h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .article-desc {
+      font-size: 1rem;
+      color: #6e6e73;
+    }
+
+    /* Quiz Section */
+    .quiz-section {
+      min-height: 100vh; /* Full viewport height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      text-align: center;
+      width: 100vw; /* Full viewport width */
+      box-sizing: border-box;
+      scroll-snap-align: start; /* Snap to section start */
+    }
+
+    .quiz-section h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-section p {
+      font-size: 1.25rem;
+      color: #6e6e73;
+      margin-bottom: 2rem;
+    }
+
+    .carousel-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 100%;
+      margin: 2rem auto;
+    }
+
+    .carousel-track-wrapper {
+      overflow: hidden;
+      width: 80%;
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .quiz-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin: 0 12px;
+      min-width: 300px;
+      max-width: 300px;
+      flex: 0 0 auto;
+      padding: 16px;
+      text-decoration: none;
+      color: #1d1d1f;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .quiz-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-card p {
+      font-size: 0.875rem;
+      color: #6e6e73;
+    }
+
+    .carousel-arrow {
+      background: none;
+      border: none;
+      color: #1d1d1f;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: opacity 0.2s ease;
+    }
+
+    .carousel-arrow:hover {
+      opacity: 0.7;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      gap: 8px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: #d2d2d7;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .carousel-dot.active {
+      background: #0071e3;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .featured-article, .blog-section, .quiz-section {
+        min-height: auto; /* Adapt height on smaller screens */
+        padding: 60px 16px;
+      }
+
+      .featured-title {
+        font-size: 2.5rem;
+      }
+
+      .featured-desc {
+        font-size: 1.25rem;
+      }
+
+      .blog-section h2, .quiz-section h2 {
+        font-size: 2rem;
+      }
+
+      .carousel-track-wrapper {
+        width: 90%;
+      }
+
+      html, main {
+        scroll-snap-type: none; /* Disable snapping on smaller screens */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .featured-title {
+        font-size: 2rem;
+      }
+
+      .featured-desc {
+        font-size: 1rem;
+      }
+
+      .blog-section h2, .quiz-section h2 {
+        font-size: 1.75rem;
+      }
+
+      .article-list-grid {
+        grid-template-columns: 1fr; /* Single column for small screens */
+      }
+    }
+  </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="nav-bar">
-            <div class="logo">TechWise</div>
-             <nav>
-                <ul class="nav-list">
-                    <li><a href="about.html" class="nav-btn">About Us</a></li>
-                </ul>
-            </nav>
-            <form class="search-bar" id="searchForm" autocomplete="off">
-                <input type="text" id="searchInput" placeholder="Search articles..." aria-label="Search">
-                <button type="submit" aria-label="Search">&#128269;</button>
-            </form>
-        </div>
-    </header>
-    <main>
-         <section class="featured-article large-featured" style="background-image: url('images/article-pics/featured.jpg'); background-size: fill; background-position: center;">
-    <div class="featured-overlay-content">
-      <div class="featured-text-wrapper">
-        <div class="featured-meta">
-          <span class="tag">Cybersecurity</span>
-          <span class="tag">Guide</span>
-        </div>
+  <header class="main-header">
+    <div class="nav-bar">
+      <div class="logo">TechWise</div>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="about.html" class="nav-btn">About Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Featured/Hero Section -->
+    <section class="featured-article" id="hero">
+      <div class="featured-content">
         <h1 class="featured-title">Exploring the Wonders of Online Safety</h1>
         <p class="featured-desc">An essential guide for seniors: discover the secrets to staying safe and confident online.</p>
         <div class="featured-author-row">
@@ -37,191 +403,231 @@
           <span class="featured-date">Leader</span>
         </div>
       </div>
-    </div>
-  </section>
-        <section class="blog-section">
-            <div class="blog-header">
-                <h2>Blog</h2>
-                <div class="blog-controls">
-                    <div class="tags" id="tagFilter">
-                        <button class="tag-btn active" data-tag="all">All</button>
-                        <button class="tag-btn" data-tag="cybersecurity">Cybersecurity</button>
-                        <button class="tag-btn" data-tag="tips">Tips & Hacks</button>
-                        <button class="tag-btn" data-tag="lifestyle">Lifestyle</button>
-                    </div>
-                    <div class="sort">
-                        <label for="sortSelect">Sort by:</label>
-                        <select id="sortSelect">
-                            <option value="newest">Newest</option>
-                            <option value="oldest">Oldest</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="article-list-grid" id="articleGrid">
-                <a class="article-card" href="#" data-date="2024-01-24" data-tags="cybersecurity,guide">
-                    <img src="images/article-pics/passwords.jpg" alt="Strong Passwords" class="article-thumb">
-                    <span class="tag">Cybersecurity</span>
-                    <div class="article-card-content">
-                        <h3>How to Create Strong Passwords</h3>
-                        <p class="article-desc">Learn simple steps to make your passwords safer and harder to guess.</p>
-                    </div>
-                </a>
-                <a class="article-card" href="#" data-date="2024-01-20" data-tags="tips">
-                    <img src="images/article-pics/article2.jpg" alt="Online Scams" class="article-thumb">
-                    <span class="tag">Tips & Hacks</span>
-                    <div class="article-card-content">
-                        <h3>Spotting Online Scams</h3>
-                        <p class="article-desc">Tips to recognize and avoid common internet scams targeting seniors.</p>
-                    </div>
-                </a>
-                <a class="article-card" href="#" data-date="2024-01-15" data-tags="lifestyle">
-                    <img src="images/article-pics/article3.avif" alt="Article 3" class="article-thumb">
-                    <span class="tag">Lifestyle</span>
-                    <div class="article-card-content">
-                        <h3>Email Safety Basics</h3>
-                        <p class="article-desc">How to tell if an email is safe or a phishing attempt.</p>
-                    </div>
-                </a>
-            </div>
-        </section>
-        <!-- Quiz Section Start -->
-        <section class="quiz-section">
-            <div class="quiz-header">
-                <div>
-                    <h2>Cybersecurity Quizzes</h2>
-                    <p>Test your knowledge and improve your online safety skills!</p>
-                </div>
-                <div class="quiz-actions">
-                    <div class="quiz-scroll-buttons">
-                        <button id="quizScrollLeft" class="scroll-btn">&larr;</button>
-                        <button id="quizScrollRight" class="scroll-btn">&rarr;</button>
-                    </div>
-                    <a href="create-quiz.html" class="quiz-btn nav-link">Create Quiz</a>
-                </div>
-            </div>
-            <div class="quiz-scroll-wrapper">
-                <div class="quiz-list-grid" id="quizGrid"></div>
-            </div>
-        </section>
-        <!-- Quiz Section End -->
-    </main>
-    <script>
-    // Search functionality
-    function filterArticles(query) {
-        const cards = document.querySelectorAll('.article-card');
-        let anyVisible = false;
-        cards.forEach(card => {
-            const text = card.textContent.toLowerCase();
-            if (text.includes(query)) {
-                card.style.display = '';
-                anyVisible = true;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-        // Optionally hide featured if searching
-        const featured = document.querySelector('.featured-article');
-        if (query.trim() !== "") {
-            if (featured) featured.style.display = "none";
-        } else {
-            if (featured) featured.style.display = "";
-        }
-    }
+    </section>
 
-    document.getElementById('searchForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const query = document.getElementById('searchInput').value.trim().toLowerCase();
-        filterArticles(query);
-    });
+    <!-- Blog Section -->
+    <section class="blog-section" id="blog">
+      <h2>Blog</h2>
+      <div class="article-list-grid" id="articleGrid">
+        <a class="article-card" href="pass_blog.html" data-date="2024-01-24" data-tags="cybersecurity,guide">
+          <img src="images/article-pics/passwords.jpg" alt="Strong Passwords" class="article-thumb">
+          <span class="tag">Cybersecurity</span>
+          <div class="article-card-content">
+            <h3>How to Create Strong Passwords</h3>
+            <p class="article-desc">Learn simple steps to make your passwords safer and harder to guess.</p>
+          </div>
+        </a>
+        <a class="article-card" href="phish_blog.html" data-date="2024-01-20" data-tags="tips">
+          <img src="images/article-pics/phish.jpg" alt="Online Scams" class="article-thumb">
+          <span class="tag">Tips & Hacks</span>
+          <div class="article-card-content">
+            <h3>Phishing Awareness</h3>
+            <p class="article-desc">Learn how to recognize and avoid phishing scams.</p>
+          </div>
+        </a>
+        <a class="article-card" href="email_blog.html" data-date="2024-01-15" data-tags="lifestyle">
+          <img src="images/article-pics/email.webp" alt="Email Safety" class="article-thumb">
+          <span class="tag">Lifestyle</span>
+          <div class="article-card-content">
+            <h3>Email Safety Basics</h3>
+            <p class="article-desc">How to tell if an email is safe or a phishing attempt.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+    
+    <!-- Quiz Section -->
+    <section class="quiz-section" id="quizzes">
+      <h2>Cybersecurity Quizzes</h2>
+      <p>Test your knowledge and improve your online safety skills!</p>
+      <div class="carousel-container">
+        <button id="quizScrollLeft" class="carousel-arrow">&#10094;</button>
+        <div class="carousel-track-wrapper">
+          <div class="carousel-track" id="quizGrid"></div>
+        </div>
+        <button id="quizScrollRight" class="carousel-arrow">&#10095;</button>
+      </div>
+      <div id="carouselDots" class="carousel-dots"></div>
+    </section>
+  </main>
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase();
-        filterArticles(query);
-    });
+  <script>
+    let quizIndex = 0;
+    const cardWidth = 324; // card width + margin
 
-    // Tag filter
-    document.querySelectorAll('.tag-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            const tag = this.getAttribute('data-tag');
-            document.querySelectorAll('.article-card').forEach(card => {
-                if (tag === 'all' || card.getAttribute('data-tags').includes(tag)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Sort functionality
-    document.getElementById('sortSelect').addEventListener('change', function() {
-        const grid = document.getElementById('articleGrid');
-        const cards = Array.from(grid.querySelectorAll('.article-card'));
-        const sortBy = this.value;
-        cards.sort((a, b) => {
-            const dateA = new Date(a.getAttribute('data-date'));
-            const dateB = new Date(b.getAttribute('data-date'));
-            return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
-        });
-        cards.forEach(card => grid.appendChild(card));
-    });
-
-    // Load quizzes
     function loadQuizzes() {
-        const grid = document.getElementById('quizGrid');
-        grid.innerHTML = '';
-        // Load from localStorage
-        let quizzes = JSON.parse(localStorage.getItem('quizzes') || '[]');
-        quizzes.forEach((quiz, idx) => {
-            const card = document.createElement('a');
-            card.className = 'quiz-card';
-            const thumbnail = quiz.thumbnail
-                ? `<img src="${quiz.thumbnail}" alt="${quiz.title} Thumbnail" class="quiz-thumb">`
-                : `<div class="quiz-thumb"></div>`;
-            card.href = `quiz-take.html?quiz=${idx}`; // Pass index in URL
-            card.innerHTML = `
-                ${thumbnail}
-                <h3>${quiz.title}</h3>
-                <p class="quiz-desc">${quiz.questions.length} questions</p>
-            `;
-          grid.appendChild(card);
-        });
+      const grid = document.getElementById('quizGrid');
+      const quizzes = [
+        {
+          title: "Strong Passwords Quiz",
+          thumbnail: "images/article-pics/passwords.jpg",
+          link: "passwordquiz.html",
+          desc: "Test your knowledge about creating strong passwords."
+        },
+        {
+          title: "Email Safety Quiz",
+          thumbnail: "images/article-pics/email.webp",
+          link: "emailquiz.html",
+          desc: "A fast, accessible quiz with instant feedback."
+        },
+        {
+          title: "Phishing Awareness Quiz",
+          thumbnail: "images/article-pics/phish.jpg",
+          link: "phishquiz.html",
+          desc: "Learn how to spot phishing attempts."
+        }
+      ];
 
-        // Optionally, add your static quizzes here as well
+      quizzes.forEach((quiz, index) => {
+        const card = document.createElement('a');
+        card.className = 'quiz-card';
+        card.href = quiz.link; // Set href for navigation
+        card.innerHTML = `
+          <img src="${quiz.thumbnail}" alt="${quiz.title}">
+          <h3>${quiz.title}</h3>
+          <p>${quiz.desc}</p>
+        `;
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.addEventListener('click', (e) => {
+          e.preventDefault(); // Prevent default behavior (new tab)
+          window.location.href = quiz.link; // Navigate to quiz page
+        });
+        grid.appendChild(card);
+      });
+
+      updateCarousel();
     }
+
+    function updateCarousel() {
+      const grid = document.getElementById('quizGrid');
+      const cards = grid.querySelectorAll('.quiz-card');
+      const track = document.querySelector('.carousel-track-wrapper');
+      const visibleCards = Math.floor(track.offsetWidth / cardWidth);
+
+      const maxIndex = Math.max(0, cards.length - visibleCards);
+      quizIndex = Math.min(quizIndex, maxIndex);
+
+      grid.style.transform = `translateX(-${quizIndex * cardWidth}px)`;
+      updateDots(maxIndex + 1);
+    }
+
+    function updateDots(total) {
+      const dotsContainer = document.getElementById('carouselDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === quizIndex ? ' active' : '');
+        dot.addEventListener('click', () => {
+          quizIndex = i;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    document.getElementById('quizScrollLeft').addEventListener('click', () => {
+      quizIndex = Math.max(0, quizIndex - 1);
+      updateCarousel();
+    });
+
+    document.getElementById('quizScrollRight').addEventListener('click', () => {
+      quizIndex = quizIndex + 1;
+      updateCarousel();
+    });
+
+    window.addEventListener('resize', updateCarousel);
     window.addEventListener('DOMContentLoaded', loadQuizzes);
 
-    // Quiz Scroller
-    const quizScrollWrapper = document.querySelector('.quiz-scroll-wrapper');
-    const scrollLeftBtn = document.getElementById('quizScrollLeft');
-    const scrollRightBtn = document.getElementById('quizScrollRight');
+    // Scroll snapping with minimal scroll effort and shorter pause
+    let isScrolling = false;
 
-    if (quizScrollWrapper && scrollLeftBtn && scrollRightBtn) {
-        const scrollAmount = 312; // width of card (280) + gap (32)
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault(); // Prevent default scrolling
+      if (isScrolling) return; // Prevent multiple simultaneous scrolls
 
-        scrollRightBtn.addEventListener('click', () => {
-            quizScrollWrapper.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
+      isScrolling = true;
+      const delta = e.deltaY; // Get scroll direction
+      const sections = document.querySelectorAll('section');
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-        scrollLeftBtn.addEventListener('click', () => {
-            quizScrollWrapper.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-    }
+      // Find current section
+      let currentSection = null;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 0 && rect.bottom > 0) {
+          currentSection = section;
+        }
+      });
 
-    const cards = document.querySelectorAll('.article-card');
-    function onScroll() {
-        cards.forEach((card, i) => {
-            const rect = card.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 50) {
-                card.classList.add('fade-in', 'in-view');
-                card.style.transitionDelay = `${0.1 + i * 0.1}s`;
-            }
-        });
-    }
+      // Determine next or previous section based on scroll direction
+      let targetSection = null;
+      if (delta > 0) { // Scrolling down
+        const next = currentSection ? currentSection.nextElementSibling : sections[0];
+        if (next && next.tagName === 'SECTION') {
+          targetSection = next;
+        }
+      } else if (delta < 0) { // Scrolling up
+        const prev = currentSection ? currentSection.previousElementSibling : sections[sections.length - 1];
+        if (prev && prev.tagName === 'SECTION') {
+          targetSection = prev;
+        }
+      }
 
-    window.addEventListener('scroll', onScroll);
-    onScroll();
-    </script>
+      // Scroll to target section
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Reset scrolling flag after shorter pause
+      setTimeout(() => {
+        isScrolling = false;
+      }, 300); // Reduced from 600ms to 300ms for quicker response
+    }, { passive: false });
+
+    // Handle touch devices
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (isScrolling) return;
+      e.preventDefault(); // Prevent default touch scrolling
+
+      const touchY = e.touches[0].clientY;
+      const delta = touchStartY - touchY; // Positive for swipe down, negative for swipe up
+      const sections = document.querySelectorAll('section');
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      let currentSection = null;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 0 && rect.bottom > 0) {
+          currentSection = section;
+        }
+      });
+
+      let targetSection = null;
+      if (delta > 10) { // Swipe down
+        const next = currentSection ? currentSection.nextElementSibling : sections[0];
+        if (next && next.tagName === 'SECTION') {
+          targetSection = next;
+        }
+      } else if (delta < -10) { // Swipe up
+        const prev = currentSection ? currentSection.previousElementSibling : sections[sections.length - 1];
+        if (prev && prev.tagName === 'SECTION') {
+          targetSection = prev;
+        }
+      }
+
+      if (targetSection) {
+        isScrolling = true;
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+          isScrolling = false;
+        }, 300); // Reduced from 600ms to 300ms
+      }
+    }, { passive: false });
+  </script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Awareness Quiz</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-y: auto; /* Ensure scrolling is enabled if needed */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #1d1d1f;
+            background-color: #f5f5f7;
+            line-height: 1.5;
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Center quiz vertically and horizontally */
+            padding: 48px; /* Increased padding for whitespace */
+        }
+
+        #quiz-container {
+            background: white;
+            padding: 48px; /* More padding for spaciousness */
+            border-radius: 24px; /* Larger, Apple-like rounded corners */
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+            max-width: 1000px; /* Wider to utilize space */
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem; /* More whitespace */
+        }
+
+        h1 {
+            font-size: 3.5rem; /* Larger, bolder heading */
+            font-weight: 800;
+            color: #1d1d1f;
+            margin: 0;
+        }
+
+        #home-btn {
+            padding: 12px 24px; /* Larger button */
+            background: #0071e3; /* Apple blue */
+            color: #fff;
+            border: none;
+            border-radius: 24px; /* Rounded to match Apple style */
+            cursor: pointer;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+
+        #home-btn:hover {
+            background: #005bb5; /* Darker blue on hover */
+        }
+
+        #home-btn:active {
+            transform: scale(0.98);
+        }
+
+        #progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px; /* More spacing */
+            margin-bottom: 3rem;
+        }
+
+        .dot {
+            width: 12px; /* Larger dots */
+            height: 12px;
+            border-radius: 50%;
+            background: #d2d2d7;
+            transition: transform 0.3s ease;
+        }
+
+        .dot.filled {
+            background: #0071e3; /* Apple blue */
+        }
+
+        .dot.current {
+            background: #0071e3;
+            transform: scale(1.3); /* Slightly larger scale */
+        }
+
+        #question {
+            font-size: 2rem; /* Larger question text */
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            color: #1d1d1f;
+        }
+
+        #options {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns for two options */
+            gap: 24px; /* More spacing */
+            margin-bottom: 2.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px; /* Larger padding */
+            background: #f5f5f7; /* Light background */
+            border: 1px solid #d2d2d7;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 24px; /* Larger, rounded corners */
+            font-size: 1.5rem; /* Larger text */
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+        }
+
+        .option:hover:not(.disabled) {
+            background: #e5e5e7;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .option:active:not(.disabled) {
+            transform: scale(0.98);
+        }
+
+        .option:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #0071e3; /* Apple blue focus ring */
+        }
+
+        .option.correct {
+            background: #d2f4ea;
+            border-color: #0071e3;
+            color: #1d1d1f;
+        }
+
+        .option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #1d1d1f;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #feedback {
+            margin-top: 2rem;
+            padding: 24px;
+            border-radius: 16px; /* Rounded to match style */
+            font-size: 1.25rem;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            transform: translateY(20px); /* Larger entrance animation */
+        }
+
+        #feedback.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #feedback.correct {
+            background: #d2f4ea;
+            color: #1d1d1f;
+        }
+
+        #feedback.wrong {
+            background: #f8d7da;
+            color: #1d1d1f;
+        }
+
+        #summary {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(20px);
+            background: white;
+            padding: 48px; /* More padding */
+            border-radius: 24px; /* Larger, rounded corners */
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: none;
+            z-index: 1000;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        #summary.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateY(0);
+        }
+
+        #summary h2 {
+            font-size: 2.5rem; /* Larger heading */
+            font-weight: 800;
+            color: #0071e3; /* Apple blue */
+            margin-bottom: 1.5rem;
+        }
+
+        #summary p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        #summary button {
+            padding: 16px 32px; /* Larger button */
+            background: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.1s ease;
+        }
+
+        #summary button:hover {
+            background: #005bb5;
+        }
+
+        #summary button:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 24px;
+            }
+
+            #quiz-container {
+                padding: 32px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            #question {
+                font-size: 1.75rem;
+            }
+
+            #options {
+                grid-template-columns: 1fr; /* Stack options vertically */
+                gap: 16px;
+            }
+
+            .option {
+                font-size: 1.25rem;
+                padding: 20px;
+            }
+
+            #feedback {
+                font-size: 1rem;
+            }
+
+            #summary {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            #question {
+                font-size: 1.5rem;
+            }
+
+            .option {
+                font-size: 1rem;
+            }
+
+            #summary h2 {
+                font-size: 2rem;
+            }
+
+            #summary p {
+                font-size: 1.25rem;
+            }
+
+            #summary button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div class="header">
+            <button id="home-btn">Home</button>
+            <h1>Phishing Awareness Quiz</h1>
+        </div>
+        <div id="progress-dots"></div>
+        <h2 id="question"></h2>
+        <div id="options" role="radiogroup" aria-labelledby="question"></div>
+        <div id="feedback" hidden></div>
+    </div>
+    <div id="summary" hidden></div>
+
+    <script>
+        // Questions array with two choices per question
+        const questions = [
+            {
+                id: 1,
+                question: "Tama bang galing ang email sa isang opisyal na kumpanya kung ang email address ay nagtatapos sa \".ac.kr\"?",
+                choices: [
+                    {id: 'a', text: "Oo"},
+                    {id: 'b', text: "Hindi"}
+                ],
+                correctChoiceId: 'b',
+                explanation: "Ang \".ac.kr\" ay karaniwang para sa mga institusyong pang-edukasyon sa Korea, hindi para sa opisyal na kumpanya. Suriin ang domain upang matiyak na ito ay mula sa lehitimong pinagmulan."
+            },
+            {
+                id: 2,
+                question: "Normal lang ba na ang isang email ay may maling gramatika at baybay kung ito ay galing sa isang lehitimong kumpanya?",
+                choices: [
+                    {id: 'a', text: "Oo"},
+                    {id: 'b', text: "Hindi"}
+                ],
+                correctChoiceId: 'b',
+                explanation: "Ang mga lehitimong kumpanya ay karaniwang may propesyonal na komunikasyon na walang mga pagkakamali sa gramatika o baybay. Ito ay isang karaniwang tanda ng phishing."
+            },
+            {
+                id: 3,
+                question: "Kapag ang email ay nagsasabing \"maaaring mabura ang iyong email\", sinadya ba nitong magdulot ng takot o pagmamadali?",
+                choices: [
+                    {id: 'a', text: "Oo"},
+                    {id: 'b', text: "Hindi"}
+                ],
+                correctChoiceId: 'a',
+                explanation: "Oo, ang phishing emails ay madalas gumagamit ng mga takot na taktika tulad ng urgency o banta upang magmadali ka at mag-click ng mga link nang hindi nag-iisip."
+            },
+            {
+                id: 4,
+                question: "Ligtas bang i-click agad ang isang link kung ito ay mukhang totoo sa unang tingin?",
+                choices: [
+                    {id: 'a', text: "Oo"},
+                    {id: 'b', text: "Hindi"}
+                ],
+                correctChoiceId: 'b',
+                explanation: "Hindi, laging suriin ang URL sa pamamagitan ng pag-hover o pag-type nang manu-mano upang maiwasan ang mga peke na link na humahantong sa mga phishing site."
+            },
+            {
+                id: 5,
+                question: "Makakatulong ba ang pag-hover ng mouse sa link upang makita kung ito ay lehitimo?",
+                choices: [
+                    {id: 'a', text: "Oo"},
+                    {id: 'b', text: "Hindi"}
+                ],
+                correctChoiceId: 'a',
+                explanation: "Oo, ang pag-hover sa link ay magpapakita ng totoong URL sa ibabang bahagi ng screen, na makakatulong upang suriin kung ito ay lehitimong address."
+            }
+        ];
+
+        // State variables
+        let currentIndex = 0;
+        let responses = []; // Array of chosen choiceIds for each question
+
+        // Elements
+        const progressDots = document.getElementById('progress-dots');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const summaryEl = document.getElementById('summary');
+        const quizContainer = document.getElementById('quiz-container');
+        const homeBtn = document.getElementById('home-btn');
+
+        // Home button handler
+        homeBtn.onclick = () => {
+            window.location.href = 'index.html';
+        };
+
+        // Calculate score
+        function calculateScore() {
+            return responses.reduce((score, chosenId, idx) => {
+                return score + (chosenId === questions[idx].correctChoiceId ? 1 : 0);
+            }, 0);
+        }
+
+        // Shuffle questions
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+        }
+
+        // Render current question
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            progressDots.innerHTML = '';
+            for (let i = 0; i < questions.length; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (i < currentIndex) {
+                    dot.classList.add('filled');
+                }
+                if (i === currentIndex) {
+                    dot.classList.add('current');
+                }
+                progressDots.appendChild(dot);
+            }
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+            q.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.classList.add('option');
+                btn.dataset.choiceId = choice.id;
+                btn.textContent = choice.text; // Remove choice ID prefix
+                btn.setAttribute('role', 'radio');
+                btn.setAttribute('aria-checked', 'false');
+                btn.onclick = () => selectAnswer(btn, choice.id);
+                optionsEl.appendChild(btn);
+            });
+            feedbackEl.hidden = true;
+            feedbackEl.classList.remove('visible', 'correct', 'wrong');
+            summaryEl.hidden = true;
+            quizContainer.style.display = 'block';
+        }
+
+        // Handle answer selection
+        function selectAnswer(btn, choiceId) {
+            if (btn.classList.contains('disabled')) return;
+            const q = questions[currentIndex];
+            const isCorrect = choiceId === q.correctChoiceId;
+            responses[currentIndex] = choiceId;
+
+            // Disable all options
+            const allOptions = optionsEl.querySelectorAll('.option');
+            allOptions.forEach(opt => {
+                opt.classList.add('disabled');
+                opt.disabled = true;
+                opt.setAttribute('aria-disabled', 'true');
+                if (opt.dataset.choiceId === q.correctChoiceId) {
+                    opt.classList.add('correct');
+                    opt.setAttribute('aria-checked', 'true');
+                } else if (opt.dataset.choiceId === choiceId) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            // Show feedback
+            feedbackEl.textContent = isCorrect ? `Tama! ${q.explanation}` : `Mali. ${q.explanation}`;
+            feedbackEl.classList.add(isCorrect ? 'correct' : 'wrong');
+            feedbackEl.hidden = false;
+            setTimeout(() => feedbackEl.classList.add('visible'), 10);
+
+            // Auto next after 2 seconds
+            setTimeout(() => {
+                currentIndex++;
+                if (currentIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showSummary();
+                }
+            }, 2000);
+        }
+
+        // Show summary
+        function showSummary() {
+            const score = calculateScore();
+            quizContainer.style.display = 'none';
+            summaryEl.innerHTML = `<h2>Quiz Complete!</h2><p>Your score: ${score}/${questions.length}</p>`;
+            const restartBtn = document.createElement('button');
+            restartBtn.textContent = 'Restart';
+            restartBtn.onclick = () => {
+                summaryEl.classList.remove('visible');
+                setTimeout(() => {
+                    summaryEl.style.display = 'none';
+                    summaryEl.hidden = true;
+                    restartQuiz();
+                }, 500);
+            };
+            summaryEl.appendChild(restartBtn);
+            summaryEl.hidden = false;
+            summaryEl.style.display = 'block';
+            setTimeout(() => {
+                summaryEl.classList.add('visible');
+            }, 10);
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            currentIndex = 0;
+            responses = [];
+            shuffleQuestions();
+            renderQuestion();
+        }
+
+        // Keyboard navigation for arrows
+        optionsEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                const options = Array.from(optionsEl.querySelectorAll('.option:not(.disabled)'));
+                const current = document.activeElement;
+                const idx = options.indexOf(current);
+                if (idx === -1) return;
+                let nextIdx = idx;
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                    nextIdx = idx + 1;
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                    nextIdx = idx - 1;
+                }
+                if (nextIdx < 0) nextIdx = options.length - 1;
+                if (nextIdx >= options.length) nextIdx = 0;
+                options[nextIdx].focus();
+            }
+        });
+
+        // Initial load
+        shuffleQuestions();
+        renderQuestion();
+    </script>
+</body>
+</html>
